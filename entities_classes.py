@@ -1,7 +1,7 @@
 # Automate Table Analysis
 
 # Produce a list with the objects(entities) to analyze. Also produce
-# attributes list through wich the objects are analized.
+# attributes list through which the objects are analyzed.
 
 import mysql.connector
 import re
@@ -16,8 +16,8 @@ def get_col_names(table_name):
     # An absolute name of the table is needed. From this name the database and
     # table names can be obtained. 
 
-    database = table_name.split('.')[0] # get database name
-    table = table_name.split('.')[1] # get table name
+    database = table_name.split('.')[0] # Get database name.
+    table = table_name.split('.')[1] # Get table name.
     
     get_c_names = ''' 
                   SELECT COLUMN_NAME
@@ -25,24 +25,21 @@ def get_col_names(table_name):
                   WHERE TABLE_SCHEMA = \'%s\'
                   AND
                   TABLE_NAME = \'%s\';
-                  ''' % (database, table) # build the SQL query
+                  ''' % (database, table) # Build the SQL query.
     
     conn = mysql.connector.connect(host = 'localhost', user = 'root',
-                                   password = 'dance') # MySQL connection
+                                   password = 'dance') # Create MySQL connection.
     cursor = conn.cursor()
     cursor.execute(get_c_names)
     col_names = cursor.fetchall()
 
     p_names = [re.sub(r'\(|\)|\'|,', '', str(x)) for x in col_names]
-    # Transform the list from the fetchall() function to simple list of strings
+    # Transform the list from the fetchall() function to simple list of strings.
     
 
     conn.commit() # Send the query to MySQL
     # print('All columns:', p_names)
     return p_names
-
-# column_names = get_col_names('world.country_x')
-# print(column_names)
 
 def table_create(table_name):
     # Build a table creating SQL query. This table will contain the results for
@@ -50,7 +47,7 @@ def table_create(table_name):
 
     new_table_name = str(table_name)+'_'+(str(time.localtime(time.time()).tm_mon)
                                     +str(time.localtime(time.time()).tm_year))
-    # create name for the new table
+    # Create name for the new table.
     
     mysql_send = '''
                 CREATE TABLE %s(
@@ -62,8 +59,8 @@ def table_create(table_name):
 
     conn = mysql.connector.connect(host = 'localhost', user = 'root',
                                    password = 'dance')
-    cursor = conn.cursor()     # there are no results to fetch here because all
-    cursor.execute(mysql_send) # the changes are made on the server side
+    cursor = conn.cursor()     # There are no results to fetch here because all
+    cursor.execute(mysql_send) # the changes are made on the server side.
     conn.commit()
 
 
@@ -92,7 +89,7 @@ def insert_found_classes(table_name, column_name):
                   ''' % (new_table_name, column_name, column_name, table_name,
                          column_name, column_name, table_name, column_name,
                          table_name, column_name, column_name, table_name)
-    # this query uses some subqueries to calculate which columns are less than
+    # This query uses some subqueries to calculate which columns are less than
     # 20 percent unique. 
 
     conn = mysql.connector.connect(host = 'localhost', user = 'root',
@@ -106,7 +103,7 @@ def insert_found_classes(table_name, column_name):
 def class_insert(table_name):
     # Insert the result values('class', 'not a class') with the
     # 'insert_found_classes() function'. Each loop runs the function and
-    # evaluates 1 column as 'class' or 'not a class'
+    # evaluates 1 column as 'class' or 'not a class'.
 
     col_names = get_col_names(table_name)
     # Get the column names from the main table.
@@ -129,7 +126,7 @@ def get_class_columns(table_name):
                 SELECT `column` FROM %s
                 WHERE is_it_class = 'class';
                 ''' % new_table_name
-                # Extract the class values from the class tables MySQL query.
+                # Extract the class values from the class tables.
     
     conn = mysql.connector.connect(host = 'localhost', user = 'root',
                                     password = 'dance')
@@ -140,7 +137,7 @@ def get_class_columns(table_name):
     conn.commit()
 
     classes = [re.sub(r'\(|\)|\'|,', '', str(x)) for x in classes]
-    # Transform the list from the fetchall() function to simple list of strings
+    # Transform the list from the fetchall() function to simple list of strings.
     
     return classes
 
@@ -186,7 +183,7 @@ def clear_non_class(table_name):
                   AND
                   TABLE_NAME = \'%s\';
                   ''' % (database, table) # Build SQL query to extract the
-                  # non-class names with thir data types.
+                  # non-class names with their data types.
     
     conn = mysql.connector.connect(host = 'localhost', user = 'root',
                                    password = 'dance') # MySQL connection
@@ -195,9 +192,8 @@ def clear_non_class(table_name):
     col_names = cursor.fetchall()
 
     p_names = [re.sub(r'\(|\)|\'|,', '', str(x)) for x in col_names]
-    # Transform the list from the fetchall() function to simple list of strings
+    # Transform the list from the fetchall() function to a simple list of strings.
     
-
     conn.commit() # Send the query to MySQL
     
     get_non_col = get_non_class_columns(table_name)
@@ -205,7 +201,7 @@ def clear_non_class(table_name):
     
     p_names = [x for x in p_names if x.split(' ')[0] in get_non_col]
     # From the new list, containing column names with data types, keep those
-    # which column name is in the 'non-class' column name list.
+    # names that are in the 'non-class' column name list.
 
     accepted_types = ['tinyint', 'smallint', 'int', 'float', 'decimal',
                       'double']
@@ -260,7 +256,7 @@ def classes_dict(table_name):
 
 
 def run_functions(table_name):
-    # Run the class column and non-class column lists creating functions.
+    # Run the class column creting functions and the non-class column lists creating functions.
     
     table_create(table_name)
     class_insert(table_name)
@@ -269,4 +265,3 @@ def run_functions(table_name):
     class_dictionary = classes_dict(table_name)
 
     return class_col, non_class_col, class_dictionary
-
