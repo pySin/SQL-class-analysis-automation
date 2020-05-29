@@ -1,5 +1,6 @@
-# Find the smallest difference for a class combination from another class
-# combination analyzing protein concentration levels.
+# Find the sum difference for a class combination from another class
+# combination analyzing 77 protein concentration levels.
+# For the comparison we use the average values for the respective combination.
 # 'protein_level_comb.csv' file is used(transfer the data to MySQL).
 
 import mysql.connector
