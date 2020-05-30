@@ -10,6 +10,8 @@ Automate SQL analysis of different tables. The automation aims to find the colum
 
 2. A script that finds the closest combination to a target combination. The resembling combination must have at least 1 different class value for any of the class columns(combination_resemble.py).
 
+3. Find the sum of the difference for all the proteins from one combination with all other combinations from 'protein_levels_comb.csv'. The original data comes from https://www.kaggle.com/ruslankl/mice-protein-expression. Every protein from the 77 examined has different concentration value for every unique combination. The differences of all 77 proteins are summed to result in an overall difference('sum_comb_resemble.py'). 
+
 ## Technologies used:
 
 * MySQL Workbench
