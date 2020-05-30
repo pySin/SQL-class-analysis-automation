@@ -22,6 +22,6 @@ Automate SQL analysis of different tables. The automation aims to find the colum
 1. Install MySQL DMS.
 2. Install mysql.connector library to your Python distribution
 3. Change the Hostname, Username and Password in the scripts where the connections are created(conn = mysql.connector.connect(host = 'localhost', user = 'root', password = 'dance').
-4. Find a table to analyze. I'm using a table from here: https://www.kaggle.com/ruslankl/mice-protein-expression. Before using this table the column 'class' have to be removed, because it is some preliminary analysis that isn't needed. The data objects that are being analyzed shold be with numeric values.
+4. Find a table to analyze. I'm using a table from here: https://www.kaggle.com/ruslankl/mice-protein-expression. Before using this table the column 'class' have to be removed, because it is some preliminary analysis that isn't needed. The data objects that are being analyzed should be with numeric values.
 
 
